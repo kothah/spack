@@ -149,7 +149,6 @@ def uninstall_all_specs():
 
 def uninstall_spec(spec):
     try:
-        tty.msg("uninstalling... " + str(spec))
         pkg = spack.repo.get(spec)
         pkg.do_uninstall()
     except PackageStillNeededError as err:
