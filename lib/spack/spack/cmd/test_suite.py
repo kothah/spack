@@ -234,8 +234,8 @@ def send_reports(dashboard, path):
             if return_code > 0:
                 tty.warn("Uploading %s to %s failed: " % (xml_file, dashboard),
                          diagnose_curl_error(return_code))
-            # else:
-                # os.remove(xml_file)
+            else:
+                os.remove(xml_file)
         except ProcessError:
             tty.die("Curl exited with failure.")
 
