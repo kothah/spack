@@ -162,5 +162,5 @@ def install(parser, args, **kwargs):
         package.do_install(**kwargs)
 
     # Dump log file if asked to
-    if args.log_format is not None:
-        test_suite.dump()
+    #if args.log_format is not None:
+    #    test_suite.dump()

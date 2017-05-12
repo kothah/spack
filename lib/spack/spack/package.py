@@ -1132,6 +1132,46 @@ class PackageBase(with_metaclass(PackageMeta, object)):
                 message = '{s.name}@{s.version} : marking the package explicit'
                 tty.msg(message.format(s=self))
 
+    def add_to_queue(self,
+                   keep_prefix=False,
+                   keep_stage=False,
+                   install_deps=True,
+                   skip_patch=False,
+                   verbose=False,
+                   make_jobs=None,
+                   run_tests=False,
+                   fake=False,
+                   explicit=False,
+                   dirty=None,
+                   redundant=False,
+                   **kwargs):
+        q = []
+        if install_deps:
+            tty.msg("add to queue install dep")
+            q = q+[self.spec]
+            tty.msg(self.spec)
+            tty.debug('Installing {0} dependencies'.format(self.name))
+            for dep in self.spec.dependencies():
+                return dep.package.add_to_queue(
+                    keep_prefix=keep_prefix,
+                    keep_stage=keep_stage,
+                    install_deps=install_deps,
+                    fake=fake,
+                    skip_patch=skip_patch,
+                    verbose=verbose,
+                    make_jobs=make_jobs,
+                    run_tests=run_tests,
+                    dirty=dirty,
+                    redundant=redundant,
+                    **kwargs
+                )   
+        else:
+            tty.msg("add to queue NOT in install dep")
+            tty.msg(self.spec)
+
+            q = q+[self.spec]
+            return[q]                                
+
     def do_install(self,
                    keep_prefix=False,
                    keep_stage=False,
@@ -1203,10 +1243,18 @@ class PackageBase(with_metaclass(PackageMeta, object)):
                 str(self.name) + "@" + str(self.version) +
                 "%" + str(self.spec.compiler))
         # First, install dependencies recursively.
+        q = []
         if install_deps:
+            tty.msg("in install dep")
             tty.debug('Installing {0} dependencies'.format(self.name))
+            q = q + [self.spec]
+            tty.msg(self.spec)
+
+            #tty.msg(self.spec.dependencies())
             for dep in self.spec.dependencies():
-                dep.package.do_install(
+                #tty.msg(q)
+                tty.msg("going to add to queue")
+                dep.package.add_to_queue(
                     keep_prefix=keep_prefix,
                     keep_stage=keep_stage,
                     install_deps=install_deps,
@@ -1219,7 +1267,11 @@ class PackageBase(with_metaclass(PackageMeta, object)):
                     redundant=redundant,
                     **kwargs
                 )
-
+        else:
+            tty.msg(self.spec)
+            q = q+[self.spec]
+        #tty.msg(q)
+        sys.exit(0)
         tty.msg('Installing %s' % self.name)
 
         # Set run_tests flag before starting build.
