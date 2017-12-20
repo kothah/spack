@@ -33,6 +33,7 @@ class Armadillo(Package):
     homepage = "http://arma.sourceforge.net/"
     url = "http://sourceforge.net/projects/arma/files/armadillo-7.200.1.tar.xz"
 
+    version('7.950.1', 'c06eb38b12cae49cab0ce05f96147147')
     version('7.900.1', '5ef71763bd429a3d481499878351f3be')
     version('7.500.0', '7d316fdf3c3c7ea92b64704180ae315d')
     version('7.200.2', 'b21585372d67a8876117fd515d8cf0a2')

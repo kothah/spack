@@ -161,7 +161,7 @@ class Openmpi(AutotoolsPackage):
 
     variant(
         'fabrics',
-        default=None if _verbs_dir() is None else 'verbs',
+        default=None if _verbs_dir() is None else 'pmi',
         description='List of fabrics that are enabled',
         values=('psm', 'psm2', 'pmi', 'verbs', 'mxm'),
         multi=True
@@ -169,6 +169,7 @@ class Openmpi(AutotoolsPackage):
 
     variant(
         'schedulers',
+        default=None if _verbs_dir() is None else 'slurm',
         description='List of schedulers for which support is enabled',
         values=('alps', 'lsf', 'tm', 'slurm', 'sge', 'loadleveler'),
         multi=True
