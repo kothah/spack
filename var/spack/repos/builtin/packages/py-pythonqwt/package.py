@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -33,7 +33,7 @@ class PyPythonqwt(PythonPackage):
 
     version('0.5.5', 'a60c7da9fbca667337d14aca094b6fda')
 
-    variant('docs', default=False, description="Build documentation.")
+    variant('doc', default=False, description="Build documentation.")
 
     depends_on('py-setuptools', type='build')
     depends_on('py-numpy@1.3:',   type=('build', 'run'))

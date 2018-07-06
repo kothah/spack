@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -42,7 +42,7 @@ class Icedtea(AutotoolsPackage):
     variant('shenandoah', default=False,
             description="Build with the shenandoah gc. Only for version 3+")
 
-    depends_on('pkg-config@0.9.0:', type='build')
+    depends_on('pkgconfig', type='build')
     depends_on('gmake', type='build')
     depends_on('cups')
     depends_on('jdk', type='build')
@@ -58,7 +58,7 @@ class Icedtea(AutotoolsPackage):
     depends_on('libxcomposite', when='~X', type='build')
     depends_on('libxau', when='~X', type='build')
     depends_on('libxdmcp', when='~X', type='build')
-    depends_on('gtkplus+X', when='~X', type='build')
+    depends_on('gtkplus', when='~X', type='build')
 
     depends_on('libx11', when='+X')
     depends_on('xproto', when='+X')
@@ -71,7 +71,7 @@ class Icedtea(AutotoolsPackage):
     depends_on('libxcomposite', when='+X')
     depends_on('libxau', when='+X')
     depends_on('libxdmcp', when='+X')
-    depends_on('gtkplus+X', when='+X')
+    depends_on('gtkplus', when='+X')
 
     depends_on('freetype@2:')
     depends_on('wget', type='build')

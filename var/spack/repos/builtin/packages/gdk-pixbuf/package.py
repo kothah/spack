@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -38,7 +38,7 @@ class GdkPixbuf(AutotoolsPackage):
 
     version('2.31.2', '6be6bbc4f356d4b79ab4226860ab8523')
 
-    depends_on("pkg-config", type="build")
+    depends_on("pkgconfig", type="build")
     depends_on("gettext")
     depends_on("glib")
     depends_on("jpeg")

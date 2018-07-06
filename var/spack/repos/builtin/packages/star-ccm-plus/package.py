@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -35,7 +35,7 @@ class StarCcmPlus(Package):
 
     version('11.06.010_02', 'd349c6ac8293d8e6e7a53533d695588f')
 
-    variant('docs', default=False, description='Install the documentation')
+    variant('doc', default=False, description='Install the documentation')
 
     # Licensing
     license_required = True

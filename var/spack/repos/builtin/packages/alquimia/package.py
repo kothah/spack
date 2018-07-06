@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -31,6 +31,7 @@ class Alquimia(CMakePackage):
 
     homepage = "https://github.com/LBL-EESA/alquimia-dev"
 
+    version('xsdk-0.3.0', git='https://github.com/LBL-EESA/alquimia-dev.git', tag='xsdk-0.3.0')
     version('xsdk-0.2.0', git='https://github.com/LBL-EESA/alquimia-dev.git', tag='xsdk-0.2.0')
     version('develop', git='https://github.com/LBL-EESA/alquimia-dev.git')
 
@@ -39,8 +40,10 @@ class Alquimia(CMakePackage):
 
     depends_on('mpi')
     depends_on('hdf5')
+    depends_on('pflotran@xsdk-0.3.0', when='@xsdk-0.3.0')
     depends_on('pflotran@xsdk-0.2.0', when='@xsdk-0.2.0')
     depends_on('pflotran@develop', when='@develop')
+    depends_on('petsc@3.8.0:', when='@xsdk-0.3.0')
     depends_on('petsc@xsdk-0.2.0', when='@xsdk-0.2.0')
     depends_on('petsc@develop', when='@develop')
 

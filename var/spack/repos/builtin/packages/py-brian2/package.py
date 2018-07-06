@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -34,7 +34,7 @@ class PyBrian2(PythonPackage):
     version('2.0.1', 'df5990e9a71f7344887bc02f54dfd0f0')
     version('2.0rc3', '3100c5e4eb9eb83a06ff0413a7d43152')
 
-    variant('docs', default=False, description='Build the documentation')
+    variant('doc', default=False, description='Build the documentation')
 
     # depends on py-setuptools@6: for windows, if spack targets windows,
     # this will need to be added here
@@ -44,7 +44,5 @@ class PyBrian2(PythonPackage):
     depends_on('py-pyparsing',      type=('build', 'run'))
     depends_on('py-jinja2@2.7:',    type=('build', 'run'))
     depends_on('py-cpuinfo@0.1.6:', type=('build', 'run'))
-
-    # TODO: Add a 'test' deptype
-    # depends_on('py-nosetests@1.0:', type='test')
     depends_on('py-sphinx@1.4.2:',  type=('build', 'run'), when='+docs')
+    depends_on('py-nosetests@1.0:', type='test')

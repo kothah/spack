@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -23,7 +23,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 ##############################################################################
 from spack import *
-from spack import spack_root
+from spack.paths import spack_root
 
 
 class GobjectIntrospection(Package):
@@ -44,7 +44,7 @@ class GobjectIntrospection(Package):
     depends_on("cairo")
     depends_on("bison", type="build")
     depends_on("flex", type="build")
-    depends_on("pkg-config@0.9.0:", type="build")
+    depends_on("pkgconfig", type="build")
 
     # GobjectIntrospection does not build with sed from darwin:
     depends_on('sed', when='platform=darwin', type='build')

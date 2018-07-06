@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -42,7 +42,7 @@ class Openbabel(CMakePackage):
 
     depends_on('python', type=('build', 'run'), when='+python')
     depends_on('cmake@2.4.8:', type='build')
-    depends_on('pkg-config',   type='build')
+    depends_on('pkgconfig',   type='build')
     depends_on('cairo')       # required to support PNG depiction
     depends_on('eigen@3.0:')  # required if using the language bindings
     depends_on('libxml2')     # required to read/write CML files, XML formats

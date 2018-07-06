@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -42,10 +42,9 @@ class Nut(CMakePackage):
         'openmp', git='https://github.com/lanl/NuT.git',
         branch='openmp')
 
+    depends_on('cmake@3.0:')
     depends_on('random123')
 
-    # serial must be built with clang
-    conflicts('%gcc', when='@serial')
     conflicts('%intel', when='@serial')
     conflicts('%pgi', when='@serial')
     conflicts('%xl', when='@serial')
@@ -59,4 +58,9 @@ class Nut(CMakePackage):
     def install(self, spec, prefix):
         install('README.md', prefix)
         mkdirp(prefix.bin)
+        mkdirp(prefix.lib)
         install('spack-build/test/nut_unittests', prefix.bin)
+        install('spack-build/apps/bh-3', prefix.bin)
+        install('spack-build/lib/libnut.a', prefix.lib)
+        install_tree('test/data', prefix.data)
+        install_tree('lib', prefix.include)

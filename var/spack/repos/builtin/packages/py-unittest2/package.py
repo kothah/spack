@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -36,3 +36,6 @@ class PyUnittest2(PythonPackage):
 
     depends_on('py-setuptools', type='build')
     depends_on('py-enum34', when='^python@:3.3', type=('build', 'run'))
+    depends_on('py-traceback2', type=('build', 'run'))
+    depends_on('py-six', type=('build', 'run'))
+    depends_on('py-argparse', type=('build', 'run'))

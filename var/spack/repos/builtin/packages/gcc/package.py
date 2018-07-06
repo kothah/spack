@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -41,6 +41,8 @@ class Gcc(AutotoolsPackage):
     list_url = 'http://ftp.gnu.org/gnu/gcc/'
     list_depth = 1
 
+    version('8.1.0', '65f7c65818dc540b3437605026d329fc')
+    version('7.3.0', 'be2da21680f27624f3a87055c4ba5af2')
     version('7.2.0', 'ff370482573133a7fcdd96cd2f552292')
     version('7.1.0', '6bf56a2bca9dac9dbbf8e8d1036964a8')
     version('6.4.0', '11ba51a0cfb8471927f387c8895fe232')
@@ -62,12 +64,17 @@ class Gcc(AutotoolsPackage):
     version('4.6.4', 'b407a3d1480c11667f293bfb1f17d1a4')
     version('4.5.4', '27e459c2566b8209ab064570e1b378f7')
 
-    # Builds all default languages by default.
-    # Ada, Go, Jit, and Objective-C++ are not default languages.
+    # We specifically do not add 'all' variant here because:
+    # (i) Ada, Go, Jit, and Objective-C++ are not default languages.
     # In that respect, the name 'all' is rather misleading.
+    # (ii) Languages other than c,c++,fortran are prone to configure bug in GCC
+    # For example, 'java' appears to ignore custom location of zlib
+    # (iii) meaning of 'all' changes with GCC version, i.e. 'java' is not part
+    # of gcc7. Correctly specifying conflicts() and depends_on() in such a
+    # case is a PITA.
     variant('languages',
-            default='all',
-            values=('all', 'ada', 'brig', 'c', 'c++', 'fortran',
+            default='c,c++,fortran',
+            values=('ada', 'brig', 'c', 'c++', 'fortran',
                     'go', 'java', 'jit', 'lto', 'objc', 'obj-c++'),
             multi=True,
             description='Compilers and runtime libraries to build')
@@ -91,19 +98,17 @@ class Gcc(AutotoolsPackage):
     depends_on('gnat', when='languages=ada')
     depends_on('binutils~libiberty', when='+binutils')
     depends_on('zip', type='build', when='languages=java')
-    depends_on('zip', type='build', when='@:6 languages=all')
 
     # TODO: integrate these libraries.
     # depends_on('ppl')
     # depends_on('cloog')
 
-    # TODO: Add a 'test' deptype
-    # https://github.com/spack/spack/issues/1279
-    # depends_on('dejagnu@1.4.4', type='test')
-    # depends_on('expect', type='test')
-    # depends_on('tcl', type='test')
-    # depends_on('autogen@5.5.4:', type='test')
-    # depends_on('guile@1.4.1:', type='test')
+    # https://gcc.gnu.org/install/test.html
+    depends_on('dejagnu@1.4.4', type='test')
+    depends_on('expect', type='test')
+    depends_on('tcl', type='test')
+    depends_on('autogen@5.5.4:', type='test')
+    depends_on('guile@1.4.1:', type='test')
 
     # See https://golang.org/doc/install/gccgo#Releases
     provides('golang',        when='languages=go @4.6:')
@@ -153,14 +158,28 @@ class Gcc(AutotoolsPackage):
         # Fix parallel build on APFS filesystem
         # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
         if macOS_version() >= Version('10.13'):
-            patch('darwin/apfs.patch', when='@7.2.0')
+            patch('darwin/apfs.patch', when='@5.5.0,6.1:6.4,7.1:7.3')
+            # from homebrew via macports
+            # https://trac.macports.org/ticket/56502#no1
+            # see also: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83531
+            patch('darwin/headers-10.13-fix.patch', when='@5.5.0')
         patch('darwin/gcc-7.1.0-headerpad.patch', when='@5:')
-        patch('darwin/gcc-6.1.0-jit.patch', when='@5:')
+        patch('darwin/gcc-6.1.0-jit.patch', when='@5:7')
         patch('darwin/gcc-4.9.patch1', when='@4.9.0:4.9.3')
         patch('darwin/gcc-4.9.patch2', when='@4.9.0:4.9.3')
 
     patch('piclibs.patch', when='+piclibs')
     patch('gcc-backport.patch', when='@4.7:4.9.2,5:5.3')
+
+    # Older versions do not compile with newer versions of glibc
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81712
+    patch('ucontext_t.patch', when='@4.9,5.1:5.4,6.1:6.4,7.1')
+    patch('ucontext_t-java.patch', when='@4.9,5.1:5.4,6.1:6.4 languages=java')
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81066
+    patch('stack_t-4.9.patch', when='@4.9')
+    patch('stack_t.patch', when='@5.1:5.4,6.1:6.4,7.1')
+    # https://bugs.busybox.net/show_bug.cgi?id=10061
+    patch('signal.patch', when='@4.9,5.1:5.4')
 
     build_directory = 'spack-build'
 
@@ -290,3 +309,10 @@ class Gcc(AutotoolsPackage):
                     out.write('-rpath {0}:{1} '.format(
                               self.prefix.lib, self.prefix.lib64))
         set_install_permissions(specs_file)
+
+    def setup_environment(self, spack_env, run_env):
+        run_env.set('CC', join_path(self.spec.prefix.bin, 'gcc'))
+        run_env.set('CXX', join_path(self.spec.prefix.bin, 'g++'))
+        run_env.set('FC', join_path(self.spec.prefix.bin, 'gfortran'))
+        run_env.set('F77', join_path(self.spec.prefix.bin, 'gfortran'))
+        run_env.set('F90', join_path(self.spec.prefix.bin, 'gfortran'))

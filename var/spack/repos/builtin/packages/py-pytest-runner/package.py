@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -36,3 +36,4 @@ class PyPytestRunner(PythonPackage):
     version('2.11.1', 'bdb73eb18eca2727944a2dcf963c5a81')
 
     depends_on('py-setuptools', type='build')
+    depends_on('py-setuptools-scm@1.15:', type='build')

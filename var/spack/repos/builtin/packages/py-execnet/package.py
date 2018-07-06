@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -36,4 +36,5 @@ class PyExecnet(PythonPackage):
     version('1.4.1', '0ff84b6c79d0dafb7e2971629c4d127a')
 
     depends_on('py-setuptools',  type='build')
+    depends_on('py-setuptools-scm',  type='build')
     depends_on('py-apipkg@1.4:', type=('build', 'run'))

@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -38,10 +38,9 @@ class PyPy2cairo(WafPackage):
     depends_on('python', type=('build', 'run'))
     depends_on('cairo@1.10.0:')
     depends_on('pixman')
-    depends_on('pkg-config', type='build')
+    depends_on('pkgconfig', type='build')
 
-    # TODO: Add a 'test' deptype
-    # depends_on('py-pytest', type='test')
+    depends_on('py-pytest', type='test')
 
     def installtest(self):
         with working_dir('test'):

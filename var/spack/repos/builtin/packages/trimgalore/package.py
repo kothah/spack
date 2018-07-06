@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -33,6 +33,7 @@ class Trimgalore(Package):
     homepage = "https://github.com/FelixKrueger/TrimGalore"
     url      = "https://github.com/FelixKrueger/TrimGalore/archive/0.4.4.tar.gz"
 
+    version('0.4.5', 'c71756042b2a65c34d483533a29dc206')
     version('0.4.4', 'aae1b807b48e38bae7074470203997bb')
 
     depends_on('perl', type=('build', 'run'))
@@ -40,5 +41,7 @@ class Trimgalore(Package):
     depends_on('fastqc')
 
     def install(self, spec, prefix):
+        filter_file(r'#!/usr/bin/perl', '#!/usr/bin/env perl', 'trim_galore')
+
         mkdirp(prefix.bin)
         install('trim_galore', prefix.bin)

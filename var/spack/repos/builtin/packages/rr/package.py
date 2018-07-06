@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -39,8 +39,8 @@ class Rr(CMakePackage):
     depends_on('zlib')
     # depends_on('capnproto', when='@4.6:')  # not yet in spack
     # depends_on('libcapnp')    # needed for future releases
-    depends_on('pkg-config', type='build')
-    depends_on('py-pexpect', type='build')  # actually tests
+    depends_on('pkgconfig', type='build')
+    depends_on('py-pexpect', type='test')
 
     # rr needs architecture Nehalem and beyond, how can spack
     # test this?

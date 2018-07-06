@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -41,7 +41,7 @@ class Xproto(AutotoolsPackage):
     version('7.0.31', '04b925bf9e472c80f9212615cd684f1e')
     version('7.0.29', '16a78dd2c5ad73011105c96235f6a0af')
 
-    depends_on('pkg-config@0.9.0:', type='build')
+    depends_on('pkgconfig', type='build')
     depends_on('util-macros', type='build')
 
     def install(self, spec, prefix):

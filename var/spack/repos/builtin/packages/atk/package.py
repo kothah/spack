@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -37,7 +37,7 @@ class Atk(AutotoolsPackage):
     version('2.14.0', 'ecb7ca8469a5650581b1227d78051b8b')
 
     depends_on('glib')
-    depends_on('pkg-config', type='build')
+    depends_on('pkgconfig', type='build')
     depends_on('gobject-introspection')
 
     def url_for_version(self, version):

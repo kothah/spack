@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -36,7 +36,6 @@ class PyPkgconfig(PythonPackage):
     depends_on('python@2.6:')
     depends_on('py-setuptools', type='build')
 
-    depends_on('pkg-config', type=('build', 'run'))
+    depends_on('pkgconfig', type=('build', 'run'))
 
-    # TODO: Add a 'test' deptype
-    # depends_on('py-nose@1.0:', type='test')
+    depends_on('py-nose@1.0:', type='test')

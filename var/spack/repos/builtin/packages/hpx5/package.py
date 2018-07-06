@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -76,7 +76,7 @@ class Hpx5(AutotoolsPackage):
     depends_on("mpi", when='+photon')
     depends_on("opencl", when='+opencl')
     # depends_on("papi")
-    depends_on("pkg-config", type='build')
+    depends_on("pkgconfig", type='build')
 
     configure_directory = "hpx"
     build_directory = "spack-build"
