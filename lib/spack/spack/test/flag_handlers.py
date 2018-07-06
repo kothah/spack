@@ -1,9 +1,5 @@
 ##############################################################################
-<<<<<<< HEAD
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
-=======
 # Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
->>>>>>> 4b15391dab2dcf960d11720243c9d2bf3a3ca0c5
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -30,10 +26,7 @@ import pytest
 import os
 
 import spack.spec
-<<<<<<< HEAD
-=======
 import spack.repo
->>>>>>> 4b15391dab2dcf960d11720243c9d2bf3a3ca0c5
 import spack.build_environment
 
 
