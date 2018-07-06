@@ -55,7 +55,7 @@ class Openblas(MakefilePackage):
                         'autodetection; GENERIC, SSE_GENERIC, NEHALEM, ...)')
 
     variant(
-        'threads', default='none',
+        'threads', default='openmp',
         description='Multithreading support',
         values=('pthreads', 'openmp', 'none'),
         multi=False

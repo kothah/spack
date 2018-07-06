@@ -49,7 +49,7 @@ class Metis(Package):
     variant('gdb', default=False, description='Enables gdb support.')
 
     variant('int64', default=False, description='Sets the bit width of METIS\'s index type to 64.')
-    variant('real64', default=False, description='Sets the bit width of METIS\'s real type to 64.')
+    variant('real64', default=True, description='Sets the bit width of METIS\'s real type to 64.')
 
     depends_on('cmake@2.8:', when='@5:', type='build')
 
