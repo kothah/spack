@@ -1,27 +1,8 @@
-##############################################################################
-# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
-# Produced at the Lawrence Livermore National Laboratory.
+# Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+# Spack Project Developers. See the top-level COPYRIGHT file for details.
 #
-# This file is part of Spack.
-# Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
-# LLNL-CODE-647188
-#
-# For details, see https://github.com/spack/spack
-# Please also see the NOTICE and LICENSE files for our notice and the LGPL.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License (as
-# published by the Free Software Foundation) version 2.1, February 1999.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
-# conditions of the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-##############################################################################
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 """
 This file contains code for creating spack mirror directories.  A
 mirror is an organized hierarchy containing specially named archive
@@ -44,7 +25,7 @@ from spack.version import VersionList
 from spack.util.compression import allowed_archive
 
 
-def mirror_archive_filename(spec, fetcher, resourceId=None):
+def mirror_archive_filename(spec, fetcher, resource_id=None):
     """Get the name of the spec's archive in the mirror."""
     if not spec.version.concrete:
         raise ValueError("mirror.path requires spec with concrete version.")
@@ -87,18 +68,18 @@ Spack not to expand it with the following syntax:
         # Otherwise we'll make a .tar.gz ourselves
         ext = 'tar.gz'
 
-    if resourceId:
-        filename = "%s-%s" % (resourceId, spec.version) + ".%s" % ext
+    if resource_id:
+        filename = "%s-%s" % (resource_id, spec.version) + ".%s" % ext
     else:
         filename = "%s-%s" % (spec.package.name, spec.version) + ".%s" % ext
 
     return filename
 
 
-def mirror_archive_path(spec, fetcher, resourceId=None):
+def mirror_archive_path(spec, fetcher, resource_id=None):
     """Get the relative path to the spec's archive within a mirror."""
     return os.path.join(
-        spec.name, mirror_archive_filename(spec, fetcher, resourceId))
+        spec.name, mirror_archive_filename(spec, fetcher, resource_id))
 
 
 def get_matching_versions(specs, **kwargs):

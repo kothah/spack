@@ -1,3 +1,8 @@
+.. Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+   Spack Project Developers. See the top-level COPYRIGHT file for details.
+
+   SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 .. _advanced-packaging-tutorial:
 
 ============================
@@ -6,7 +11,7 @@ Advanced Topics in Packaging
 
 Spack tries to automatically configure packages with information from
 dependencies such that all you need to do is to list the dependencies
-(i.e. with the ``depends_on`` directive) and the build system (for example
+(i.e., with the ``depends_on`` directive) and the build system (for example
 by deriving from :code:`CmakePackage`).
 
 However, there are many special cases. Often you need to retrieve details
@@ -20,46 +25,22 @@ dependents in your package.
 Setup for the tutorial
 ----------------------
 
-The simplest way to follow along with this tutorial is to use our Docker image,
-which comes with Spack and various packages pre-installed:
+.. note::
+
+  If you are not using the tutorial docker image, it is recommended that you
+  do this section of the tutorial in a fresh clone of Spack
+
+The tutorial uses custom package definitions with missing sections that
+will be filled in during the tutorial. These package definitions are stored
+in a separate package repository, which can be enabled with:
 
 .. code-block:: console
 
-  $ docker pull alalazo/spack:advanced_packaging_tutorial
-  $ docker run --rm -h advanced-packaging-tutorial -it alalazo/spack:advanced_packaging_tutorial
-  root@advanced-packaging-tutorial:/#
-  root@advanced-packaging-tutorial:/# spack find
-  ==> 20 installed packages.
-  -- linux-ubuntu16.04-x86_64 / gcc@5.4.0 -------------------------
-  arpack-ng@3.5.0  hdf5@1.10.1   libpciaccess@0.13.5  libtool@2.4.6  m4@1.4.18  ncurses@6.0          openblas@0.2.20  openssl@1.0.2k     superlu@5.2.1       xz@5.2.3
-  cmake@3.9.4      hwloc@1.11.8  libsigsegv@2.11      libxml2@2.9.4  mpich@3.2  netlib-lapack@3.6.1  openmpi@3.0.0    pkg-config@0.29.2  util-macros@1.19.1  zlib@1.2.11
+  $ spack repo add --scope=site var/spack/repos/tutorial
 
-If you already started the image, you can set the ``EDITOR`` environment
-variable to your preferred editor (``vi``, ``emacs``, and ``nano`` are included in the image)
-and move directly to :ref:`adv_pkg_tutorial_start`.
-
-If you choose not to use the Docker image, you can clone the Spack repository
-and build the necessary bits yourself:
-
-.. code-block:: console
-
-  $ git clone https://github.com/spack/spack.git
-  Cloning into 'spack'...
-  remote: Counting objects: 92731, done.
-  remote: Compressing objects: 100% (1108/1108), done.
-  remote: Total 92731 (delta 1964), reused 4186 (delta 1637), pack-reused 87932
-  Receiving objects: 100% (92731/92731), 33.31 MiB | 64.00 KiB/s, done.
-  Resolving deltas: 100% (43557/43557), done.
-  Checking connectivity... done.
-
-  $ cd spack
-  $ git checkout tutorials/advanced_packaging
-  Branch tutorials/advanced_packaging set up to track remote branch tutorials/advanced_packaging from origin.
-  Switched to a new branch 'tutorials/advanced_packaging'
-
-At this point you can install the software that will be used
-during the rest of the tutorial (the output of the commands is omitted
-for the sake of brevity):
+If you are using the tutorial docker image, all dependency packages
+will have been installed. Otherwise, to install these packages you can use
+the following commands:
 
 .. code-block:: console
 
@@ -248,7 +229,7 @@ What we need to implement is:
           'liblapack', root=self.prefix, shared=shared, recurse=True
       )
 
-i.e. a property that returns the correct list of libraries for the LAPACK interface.
+i.e., a property that returns the correct list of libraries for the LAPACK interface.
 
 We use the name ``lapack_libs`` rather than ``libs`` because
 ``netlib-lapack`` can also provide ``blas``, and when it does it is provided
@@ -281,7 +262,7 @@ Modifying a package's build environment
 
 Spack sets up several environment variables like PATH by default to aid in
 building a package, but many packages make use of environment variables which
-convey specific information about their dependencies, for example MPICC. This
+convey specific information about their dependencies (e.g., MPICC). This
 section covers how update your Spack packages so that package-specific
 environment variables are defined at build-time.
 
@@ -299,14 +280,14 @@ To provide environment setup for a dependent, a package can implement the
 :py:func:`setup_dependent_environment <spack.package.PackageBase.setup_dependent_environment>`
 function. This function takes as a parameter a :py:class:`EnvironmentModifications <spack.environment.EnvironmentModifications>`
 object which includes convenience methods to update the environment. For
-example an MPI implementation can set ``MPICC`` for packages that depend on it:
+example, an MPI implementation can set ``MPICC`` for packages that depend on it:
 
 .. code-block:: python
 
   def setup_dependent_environment(self, spack_env, run_env, dependent_spec):
       spack_env.set('MPICC', join_path(self.prefix.bin, 'mpicc'))
 
-In this case packages which depend on ``mpi`` will have ``MPICC`` defined in
+In this case packages that depend on ``mpi`` will have ``MPICC`` defined in
 their environment when they build. This section is focused on modifying the
 build-time environment represented by ``spack_env``, but it's worth noting that
 modifications to ``run_env`` are included in Spack's automatically-generated
@@ -319,7 +300,7 @@ environment variable in the build-time environment of dependent packages.
 
   root@advanced-packaging-tutorial:/# spack edit mpich
 
-Once you're finished the method should look like this:
+Once you're finished, the method should look like this:
 
 .. code-block:: python
 
@@ -411,7 +392,7 @@ Attach attributes to other packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Build tools usually also provide a set of executables that can be used
-when another package is being installed. Spack gives the opportunity
+when another package is being installed. Spack gives you the opportunity
 to monkey-patch dependent modules and attach attributes to them. This
 helps make the packager experience as similar as possible to what would
 have been the manual installation of the same package.
@@ -441,7 +422,7 @@ Extra query parameters
 
 An advanced feature of the Spec's build-interface protocol is the support
 for extra parameters after the subscript key. In fact, any of the keys used in the query
-can be followed by a comma separated list of extra parameters which can be
+can be followed by a comma-separated list of extra parameters which can be
 inspected by the package receiving the request to fine-tune a response.
 
 Let's look at an example and try to install ``netcdf``:
@@ -489,7 +470,7 @@ If you followed the instructions correctly, the code added to the
       libraries, root=self.prefix, shared=shared, recurse=True
   )
 
-where we highlighted the line retrieving  the extra parameters. Now we can successfully
+where we highlighted the line retrieving the extra parameters. Now we can successfully
 complete the installation of ``netcdf``:
 
 .. code-block:: console

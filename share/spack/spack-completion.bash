@@ -1,27 +1,8 @@
-##############################################################################
-# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
-# Produced at the Lawrence Livermore National Laboratory.
+# Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+# Spack Project Developers. See the top-level COPYRIGHT file for details.
 #
-# This file is part of Spack.
-# Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
-# LLNL-CODE-647188
-#
-# For details, see https://github.com/spack/spack
-# Please also see the NOTICE and LICENSE files for our notice and the LGPL.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License (as
-# published by the Free Software Foundation) version 2.1, February 1999.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
-# conditions of the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-##############################################################################
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 
 # The following global variables are used/set by Bash programmable completion
 #     COMP_CWORD: An index into ${COMP_WORDS} of the word containing the
@@ -132,7 +113,8 @@ function _spack_activate {
 }
 
 function _spack_arch {
-    compgen -W "-h --help -p --platform" -- "$cur"
+    compgen -W "-h --help -p --platform -o --operating-system
+                -t --target" -- "$cur"
 }
 
 function _spack_blame {
@@ -647,44 +629,158 @@ function _spack_module {
     then
         compgen -W "-h --help" -- "$cur"
     else
-        compgen -W "find loads refresh rm" -- "$cur"
+        compgen -W "lmod tcl dotkit" -- "$cur"
     fi
 }
 
-function _spack_module_find {
+function _spack_module_tcl {
     if $list_options
     then
-        compgen -W "-h --help --full-path -m --module-type" -- "$cur"
+        compgen -W "-h --help" -- "$cur"
+    else
+        compgen -W "refresh find rm loads" -- "$cur"
+    fi
+}
+
+
+function _spack_module_tcl_find {
+    if $list_options
+    then
+        compgen -W "-h --help --full-path -r --dependencies" -- "$cur"
     else
         compgen -W "$(_installed_packages)" -- "$cur"
     fi
 }
 
-function _spack_module_loads {
+function _spack_module_tcl_loads {
     if $list_options
     then
         compgen -W "-h --help --input-only -p --prefix -x --exclude
-                    -m --module-type -r --dependencies" -- "$cur"
+                    -r --dependencies" -- "$cur"
     else
         compgen -W "$(_installed_packages)" -- "$cur"
     fi
 
 }
 
-function _spack_module_refresh {
+function _spack_module_tcl_refresh {
     if $list_options
     then
-        compgen -W "-h --help --delete-tree -m --module-type
-                    -y --yes-to-all" -- "$cur"
+        compgen -W "-h --help --delete-tree -y --yes-to-all" -- "$cur"
     else
         compgen -W "$(_installed_packages)" -- "$cur"
     fi
 }
 
-function _spack_module_rm {
+function _spack_module_tcl_rm {
     if $list_options
     then
-        compgen -W "-h --help -m --module-type -y --yes-to-all" -- "$cur"
+        compgen -W "-h --help -y --yes-to-all" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_dotkit {
+    if $list_options
+    then
+        compgen -W "-h --help" -- "$cur"
+    else
+        compgen -W "refresh find rm loads" -- "$cur"
+    fi
+}
+
+
+function _spack_module_dotkit_find {
+    if $list_options
+    then
+        compgen -W "-h --help --full-path -r --dependencies" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_dotkit_loads {
+    if $list_options
+    then
+        compgen -W "-h --help --input-only -p --prefix -x --exclude
+                    -r --dependencies" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+
+}
+
+function _spack_module_dotkit_refresh {
+    if $list_options
+    then
+        compgen -W "-h --help --delete-tree -y --yes-to-all" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_dotkit_rm {
+    if $list_options
+    then
+        compgen -W "-h --help -y --yes-to-all" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_lmod {
+    if $list_options
+    then
+        compgen -W "-h --help" -- "$cur"
+    else
+        compgen -W "refresh find rm loads setdefault" -- "$cur"
+    fi
+}
+
+
+function _spack_module_lmod_find {
+    if $list_options
+    then
+        compgen -W "-h --help --full-path -r --dependencies" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_lmod_loads {
+    if $list_options
+    then
+        compgen -W "-h --help --input-only -p --prefix -x --exclude
+                    -r --dependencies" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+
+}
+
+function _spack_module_lmod_refresh {
+    if $list_options
+    then
+        compgen -W "-h --help --delete-tree -y --yes-to-all" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_lmod_rm {
+    if $list_options
+    then
+        compgen -W "-h --help -y --yes-to-all" -- "$cur"
+    else
+        compgen -W "$(_installed_packages)" -- "$cur"
+    fi
+}
+
+function _spack_module_lmod_setdefault {
+    if $list_options
+    then
+        compgen -W "-h --help" -- "$cur"
     else
         compgen -W "$(_installed_packages)" -- "$cur"
     fi

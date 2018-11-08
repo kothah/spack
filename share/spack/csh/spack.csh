@@ -1,3 +1,8 @@
+# Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+# Spack Project Developers. See the top-level COPYRIGHT file for details.
+#
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 ########################################################################
 # This is a wrapper around the spack command that forwards calls to
 # 'spack use' and 'spack unuse' to shell functions.  This in turn
@@ -74,25 +79,25 @@ case unload:
     # tool's commands to add/remove the result from the environment.
     switch ($_sp_subcommand)
         case "use":
-            set _sp_full_spec = ( "`\spack $_sp_flags module find --module-type dotkit $_sp_spec`" )
+            set _sp_full_spec = ( "`\spack $_sp_flags module dotkit find $_sp_spec`" )
             if ( $? == 0 ) then
                 use $_sp_module_args $_sp_full_spec
             endif
             breaksw
         case "unuse":
-            set _sp_full_spec = ( "`\spack $_sp_flags module find --module-type dotkit $_sp_spec`" )
+            set _sp_full_spec = ( "`\spack $_sp_flags module dotkit find $_sp_spec`" )
             if ( $? == 0 ) then
                 unuse $_sp_module_args $_sp_full_spec
             endif
             breaksw
         case "load":
-            set _sp_full_spec = ( "`\spack $_sp_flags module find --module-type tcl $_sp_spec`" )
+            set _sp_full_spec = ( "`\spack $_sp_flags module tcl find $_sp_spec`" )
             if ( $? == 0 ) then
                 module load $_sp_module_args $_sp_full_spec
             endif
             breaksw
         case "unload":
-            set _sp_full_spec = ( "`\spack $_sp_flags module find --module-type tcl $_sp_spec`" )
+            set _sp_full_spec = ( "`\spack $_sp_flags module tcl find $_sp_spec`" )
             if ( $? == 0 ) then
                 module unload $_sp_module_args $_sp_full_spec
             endif

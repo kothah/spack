@@ -1,34 +1,17 @@
-##############################################################################
-# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
-# Produced at the Lawrence Livermore National Laboratory.
+# Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+# Spack Project Developers. See the top-level COPYRIGHT file for details.
 #
-# This file is part of Spack.
-# Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
-# LLNL-CODE-647188
-#
-# For details, see https://github.com/spack/spack
-# Please also see the NOTICE and LICENSE files for our notice and the LGPL.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License (as
-# published by the Free Software Foundation) version 2.1, February 1999.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
-# conditions of the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-##############################################################################
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 import os
 import collections
 import getpass
 import tempfile
 
+from llnl.util.filesystem import touch, mkdirp
+
 import pytest
-import yaml
+import ruamel.yaml as yaml
 
 import spack.paths
 import spack.config
@@ -614,3 +597,51 @@ def test_bad_config_section(config):
 
     with pytest.raises(spack.config.ConfigSectionError):
         spack.config.get('foobar')
+
+
+def test_bad_command_line_scopes(tmpdir, config):
+    cfg = spack.config.Configuration()
+
+    with tmpdir.as_cwd():
+        with pytest.raises(spack.config.ConfigError):
+            spack.config._add_command_line_scopes(cfg, ['bad_path'])
+
+        touch('unreadable_file')
+        with pytest.raises(spack.config.ConfigError):
+            spack.config._add_command_line_scopes(cfg, ['unreadable_file'])
+
+        mkdirp('unreadable_dir')
+        with pytest.raises(spack.config.ConfigError):
+            try:
+                os.chmod('unreadable_dir', 0)
+                spack.config._add_command_line_scopes(cfg, ['unreadable_dir'])
+            finally:
+                os.chmod('unreadable_dir', 0o700)  # so tmpdir can be removed
+
+
+def test_add_command_line_scopes(tmpdir, mutable_config):
+    config_yaml = str(tmpdir.join('config.yaml'))
+    with open(config_yaml, 'w') as f:
+            f.write("""\
+config:
+    verify_ssh: False
+    dirty: False
+"""'')
+
+    spack.config._add_command_line_scopes(mutable_config, [str(tmpdir)])
+
+
+def test_immuntable_scope(tmpdir):
+    config_yaml = str(tmpdir.join('config.yaml'))
+    with open(config_yaml, 'w') as f:
+        f.write("""\
+config:
+    install_tree: dummy_tree_value
+"""'')
+    scope = spack.config.ImmutableConfigScope('test', str(tmpdir))
+
+    data = scope.get_section('config')
+    assert data['config']['install_tree'] == 'dummy_tree_value'
+
+    with pytest.raises(spack.config.ConfigError):
+        scope.write_section('config')
